@@ -69,7 +69,7 @@ even better — issues and pull requests are very welcome.
 ## 🤝 Connect
 
 I write more about what I'm learning on
-[LinkedIn](https://www.linkedin.com/in/YOUR-PROFILE). Feel free to reach out.
+[LinkedIn](https://www.linkedin.com/in/amirhoseinjafari1/). Feel free to reach out.
 
 ---
 
