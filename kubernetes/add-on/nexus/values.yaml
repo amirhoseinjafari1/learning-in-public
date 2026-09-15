@@ -1,0 +1,86 @@
+# Nexus Repository Helm values
+# Chart: sonatype/nexus-repository-manager 64.2.0 (deprecated)
+# Replace the example domain and verify your StorageClass before deploying.
+
+image:
+  repository: sonatype/nexus3
+  tag: "3.96.1"
+  pullPolicy: IfNotPresent
+
+deploymentStrategy: Recreate
+
+deployment:
+  terminationGracePeriodSeconds: 120
+
+nexus:
+  env:
+    - name: INSTALL4J_ADD_VM_PARAMS
+      value: >-
+        -Xms2g -Xmx2g -XX:MaxDirectMemorySize=2g
+        -Djava.util.prefs.userRoot=/nexus-data/javaprefs
+    - name: NEXUS_SECURITY_RANDOMPASSWORD
+      value: "true"
+
+  resources:
+    requests:
+      cpu: "1"
+      memory: 4Gi
+    limits:
+      memory: 6Gi
+
+  securityContext:
+    runAsUser: 200
+    runAsGroup: 200
+    fsGroup: 200
+
+  livenessProbe:
+    path: /
+    initialDelaySeconds: 300
+    periodSeconds: 30
+    failureThreshold: 30
+    timeoutSeconds: 10
+
+  readinessProbe:
+    path: /
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    failureThreshold: 6
+    timeoutSeconds: 10
+
+  # Optional Docker connectors: also create matching repositories in the UI.
+  docker:
+    enabled: false
+    # registries:
+    #   - host: registry.example.com
+    #     port: 8082
+    #     secretName: registry-tls
+    #   - host: registry-stage.example.com
+    #     port: 8083
+    #     secretName: registry-stage-tls
+
+service:
+  enabled: true
+  type: ClusterIP
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  storageClass: cinder-csi
+  storageSize: 50Gi
+  annotations:
+    helm.sh/resource-policy: keep
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hostPath: /
+  hostRepo: nexus.example.com
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+  tls:
+    - hosts:
+        - nexus.example.com
+      secretName: nexus-tls

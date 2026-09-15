@@ -26,7 +26,10 @@ It's a **living repository** — always a work in progress, always growing.
 - _Coming soon_
 
 ### 📦 Containers & Kubernetes
-- _Coming soon_
+
+- [**Deploy Nexus Repository with Helm**](./kubernetes/add-on/nexus/README.md) —
+  Deploy Nexus with persistent storage, HTTPS ingress,
+  and optional Docker registry endpoints.
 
 ### 🏗️ Infrastructure as Code
 - _Coming soon_
@@ -42,7 +45,6 @@ inside. The folder names are kept lowercase and descriptive:
 learning-in-public/
 ├── README.md            # You are here — the index
 ├── openstack/
-│   └── windows-image-guide.md
 ├── linux/
 ├── cicd/
 ├── kubernetes/
